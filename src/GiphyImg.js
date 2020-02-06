@@ -1,8 +1,8 @@
 import React from 'react';
 
-function GiphyImg() {
+function GiphyImg({source}) {
     return(
-        <h1>MoreStuff</h1>
+        <img src={source.url} />
     );
 }
 

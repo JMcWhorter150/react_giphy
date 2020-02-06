@@ -1,11 +1,14 @@
 import React from 'react';
 import axios from 'axios';
+import GiphyImg from './GiphyImg';
+
+const giphyUrl = `https://api.giphy.com/v1/gifs/random?api_key=9IoUcDTPeIbQWdkdVYX0CBuBZuhMfNEk&tag=the good place&rating=G`;
 
 class GiphyApp extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            array: []
+            giphies: []
         };
     }
     /*
@@ -25,17 +28,27 @@ class GiphyApp extends React.Component{
     render() {
         return(
             <div>
-                <button onClick={(event) => {this._updateArray('hello')} }>Click Here</button>
-                <h1>Stuff</h1>
+                <button onClick={this._getGiphy}>Click Here</button>
+                <br></br>
+                {this.state.giphies.map((giphy, i) => (
+                    <GiphyImg source={giphy} key={i} />
+                ))}
             </div>
         );
     }
 
-    _updateArray = (text) => {
-        const array = [...this.state.array];
-        array.push(text);
-        this.setState({
-            array
+    _getGiphy = () => {
+        axios.get(giphyUrl)
+        .then(r => {
+            this.setState({
+                giphies: [
+                    r.data.data.images.downsized_large,
+                    ...this.state.giphies
+                ]
+                
+            })})
+        .catch(err => {
+            console.log('Yeah, no giphy for you');
         })
     }
 }
